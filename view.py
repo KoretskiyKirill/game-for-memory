@@ -1,15 +1,15 @@
 import tkinter as tk
-
+import time
 class WordPuzzleGameView:
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
         self.root.title("Игра для развития памяти")
-        self.root.geometry("450x520")
+        self.root.geometry("450x620")
         self.root.configure(bg="#2c3e50")
 
         self.selected_theme_name = tk.StringVar(value="Технологии")
-
+        self.levl = tk.StringVar(value="1")
         # Заголовок
         self.title_label = tk.Label(root, text="Memory game",
                                     font=("Helvetica", 24, "bold"),
@@ -29,6 +29,20 @@ class WordPuzzleGameView:
         self.theme_menu.config(font=("Helvetica", 14), bg="#34495e", fg="#ecf0f1", activebackground="#2980b9", relief="flat")
         self.theme_menu["menu"].config(bg="#34495e", fg="#ecf0f1", font=("Helvetica", 12))
         self.theme_menu.pack(side="left", padx=5)
+
+        theme_frame_0 = tk.Frame(root, bg="#2c3e50")
+        theme_frame_0.pack(pady=10)
+
+        level_label = tk.Label(theme_frame_0, text="выберите сложность:",
+                               font=("Helvetica", 14), bg="#2c3e50", fg="#ecf0f1")
+        level_label.pack(pady=(0, 0))
+
+        theme_options_0 = ["1","2","3"]
+        self.theme_menu_0 = tk.OptionMenu(theme_frame_0, self.levl, *theme_options_0)
+        self.theme_menu_0.config(font=("Helvetica", 14), bg="#34495e", fg="#ecf0f1", activebackground="#2980b9",
+                               relief="flat")
+        self.theme_menu_0["menu"].config(bg="#34495e", fg="#ecf0f1", font=("Helvetica", 12))
+        self.theme_menu_0.pack(side="left", padx=5, pady=0)
 
         # Кнопка начала игры
         self.start_button = tk.Button(root, text="Начать игру",
@@ -78,9 +92,19 @@ class WordPuzzleGameView:
 
     def update_words(self, text):
         self.words_label.config(text=text)
+        if self.levl.get() == "1":
+            self.root.after(3000, self.clear)
+        elif self.levl.get() == "2":
+            self.root.after(2000, self.clear)
+        elif self.levl.get() == "3":
+            self.root.after(1000, self.clear)
+
+    def clear(self):
+        self.words_label.config(text='')
 
     def clear_entry(self):
         self.entry.delete(0, tk.END)
 
     def update_score(self, score):
         self.score_label.config(text=f"Счет: {score}")
+
